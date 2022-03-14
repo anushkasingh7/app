@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,15 +23,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _url = "https://owlbot.info/api/v4/dictionary";
+  String _url = "https://owlbot.info/api/v4/dictionary/";
   String _token = "2ffc3d6aa74c7a054a2044cd06228efc25ef2de7";
 
   TextEditingController _controller = TextEditingController();
 
-  StreamController _streamController;
-  Stream _stream;
+  late StreamController _streamController;
+  late Stream _stream;
 
-  Timer _debounce;
+  late Timer _debounce;
 
   _search() async {
     if (_controller.text == null || _controller.text.length == 0) {
@@ -40,9 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     _streamController.add("waiting");
-    String finalurl = "_url" + _controller.text.trim(), headers: {"Authorization": "Token " + _token};
-
-    Response response = await get(Uri.parse(finalurl));
+    Response response=await get(Uri.parse(_url + _controller.text.trim()) , headers: {"Authorization": "Token " + _token});
     _streamController.add(json.decode(response.body));
   }
 
@@ -58,14 +56,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dictionary"),
+        backgroundColor: Colors.black,
+        title: Text("Dictionary",
+        style: TextStyle(
+            color:  Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 26,
+        ),),
+        centerTitle: true,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(48.0),
+          preferredSize: Size.fromHeight(70.0),
           child: Row(
             children: <Widget>[
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.only(left: 12.0, bottom: 12.0,right: 12.0),
+                  margin: const EdgeInsets.only(left: 15.0, bottom: 15.0,right: 15.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(24.0),
@@ -80,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     controller: _controller,
                     decoration: InputDecoration(
                       hintText: "Search for a word",
-                      contentPadding: const EdgeInsets.only(left: 24.0),
+                      contentPadding: const EdgeInsets.only(left: 25.0),
                       border: InputBorder.none,
                     ),
                   ),
@@ -106,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (BuildContext ctx, AsyncSnapshot snapshot) {
             if (snapshot.data == null) {
               return Center(
-                child: Text("Enter a search word"),
+                child: Text("Enter a word to search"),
               );
             }
 
