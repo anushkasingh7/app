@@ -77,7 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   child: TextFormField(
                     onChanged: (String text) {
-                      if (_debounce?.isActive ?? false) _debounce.cancel();
+                      final Timer? debounce = _debounce;
+                      if (debounce!= null && debounce.isActive)_debounce.cancel();
                       _debounce = Timer(const Duration(milliseconds: 1000), () {
                         _search();
                       });
